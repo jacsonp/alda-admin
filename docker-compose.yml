@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  alda-admin:
+    image: alda-admin
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      LOCALSTORAGE_PATH: /storage/private
+    restart: unless-stopped
+    volumes:
+      - "./storage/private:/storage/private"
+    labels:
+     - "traefik.port=8080"
+     - "traefik.frontend.rule=admin.aldalocal"
+     - "traefik.frontend.priority=1"
+     - "traefik.enable=true"
+     - "traefik.docker.network=web"
+    networks:
+     - web
+     - default
+networks:
+    web:
+      external: true
